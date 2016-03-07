@@ -22,23 +22,28 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-public class BuyItemServlet extends HttpServlet implements Servlet {
+
+public class ConfirmationServlet extends HttpServlet implements Servlet {
 	
-	public BuyItemServlet(){
+	public ConfirmationServlet(){}
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
-		try{
-    		
-			//make two servlets: buyitem and confirmitem
-			//or make only one servlet (this one) and use a form with a hidden input to tell this
-			//buyitem servlet which .jsp page it should route to
+		if(request.isSecure()){
 			String itemid = request.getParameter("buyingitemID");
-			HttpSession my_sesh = request.getSession(true);
+			String credit_num = request.getParameter("cred_num");
 			
-			my_sesh.setAttribute("item_bought", itemid);
+			//1 is error and -1 is no error
+			int cred_err = 1;
+			
+			//remove all whitespaces
+			credit_num = credit_num.replaceAll("\\s+","");
+			//check if credit card number is all numbers
+			if(credit_num.matches("[0-9]+")){
+				cred_err = -1;
+			}
+			
+			HttpSession my_sesh = request.getSession(true);
 			
 			Map<String, ArrayList<String>> buying_items = (HashMap<String, ArrayList<String>>) my_sesh.getAttribute("sesh_itemmap");
 			if(buying_items.containsKey(itemid)){
@@ -47,20 +52,15 @@ public class BuyItemServlet extends HttpServlet implements Servlet {
 				request.setAttribute("item_name", item_properties.get(1));
 				request.setAttribute("buy_price", item_properties.get(2));
 				request.setAttribute("seller_id", item_properties.get(3));
+				request.setAttribute("cred_num", credit_num);
+				Date curr = new Date();
+				String curr_date = curr.toString();
+				request.setAttribute("time", curr_date);
+				request.setAttribute("cred_err", cred_err);
 				
-				request.getRequestDispatcher("/purchaseitem.jsp").forward(request, response);
+				request.getRequestDispatcher("/confirmitem.jsp").forward(request, response);
 			}
-			
-			
-    		
-    		
-		} catch(Exception e){
-    		request.setAttribute("error", e.getMessage());
-    		request.getRequestDispatcher("/item.jsp").forward(request, response);
-    	}
-		
-		
-    }
-	
+		}
+	}
 
 }

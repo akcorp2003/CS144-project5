@@ -90,7 +90,7 @@ if(item != null){
 <div class="wrapper">
 	<nav role="navigation" class="navbar navbar-default">
 	    <div class="navbar-header">         
-	        <a href="#" class="navbar-brand">Project 4</a>
+	        <a href="#" class="navbar-brand">Project 5</a>
 	    </div>
 	    <div id="navbarCollapse" class="collapse navbar-collapse">
 	        <ul class="nav navbar-nav">
@@ -111,7 +111,7 @@ if(item != null){
 					<button type="submit" class="btn btn-primary">Search!</button>
 				</div>
 			</div>
-		</form>
+	</form>
 
 <%
 if(empty=="true"){
@@ -137,9 +137,21 @@ if(empty=="true"){
 		<%
 			if(item.buy_price != "N/A"){
 		%>
-			<form action="/eBay/buyitem">
-				<button type="submit" class="btn btn-primary">Buy NOW!</button>
+			<form class="form-inline" action="/eBay/buyitem">
+				<div class="form-group">
+					<div class="form-group">
+						<input type="hidden" name="buyingitemID" value="<%= itemid %>" /> 
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Buy NOW!</button>
+					</div>
+				</div>
 			</form>
+		<%
+			} 
+			else {
+		%>
+			<button type="button" class="btn btn-primary" disabled>Buy NOW!</button>
 		<%
 			}
 		%>

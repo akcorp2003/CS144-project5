@@ -136,6 +136,19 @@ public class ItemServlet extends HttpServlet implements Servlet {
     				 buying_items.put(id, item_info);
     				 my_sesh.setAttribute("sesh_itemmap", buying_items);
     			 }
+    			 else{
+    				 //update all data values for this item
+    				 ArrayList<String> item_info = buying_items.get(id);
+    				 item_info.clear();
+    				 item_info.add(item.item_id);
+    				 item_info.add(item.name);
+    				 item_info.add(item.buy_price);
+    				 item_info.add(item.seller_id);
+    				 
+    				 buying_items.put(id, item_info);
+    				 my_sesh.setAttribute("sesh_itemmap", buying_items);
+    				 
+    			 }
     		}
     		
     		request.getRequestDispatcher("/item.jsp").forward(request, response);
